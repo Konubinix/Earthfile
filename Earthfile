@@ -21,7 +21,7 @@ SETUP_USER:
     	&& adduser --uid $uid --system $username --ingroup $username \
 		&& chown -R $username:$username $HOME
 	ARG groups=audio video disk lp dialout users
-	IF  [ -n "$group" ]
+	IF  [ -n "$groups" ]
 		RUN for group in $groups ; do addgroup --system $username $group ; done
 	END
     ENV PATH=$HOME/.local/bin:$PATH

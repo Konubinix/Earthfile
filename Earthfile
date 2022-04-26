@@ -7,6 +7,11 @@ alpine-python:
 	FROM +alpine
     RUN apk add --update python3 py3-pip
 
+pip-tools:
+  FROM python:3.8-alpine
+  DO +USE_USER
+  RUN pip install pip-tools
+
 SETUP_USER:
 	COMMAND
     ARG uid=1000
@@ -32,5 +37,7 @@ AS_USER:
 USE_USER:
 	COMMAND
 	ARG groups
-    DO +SETUP_USER --groups="$groups"
-    DO +AS_USER
+    ARG uid=1000
+    ARG username=sam
+    DO +SETUP_USER --groups="$groups" --uid="${uid}" --username="${username}"
+    DO +AS_USER --uid="${uid}" --username="${username}"

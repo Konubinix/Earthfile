@@ -1,3 +1,5 @@
+VERSION 0.6
+
 alpine:
 	FROM alpine
     # setup time-zone https://wiki.alpinelinux.org/wiki/Setting_the_timezone

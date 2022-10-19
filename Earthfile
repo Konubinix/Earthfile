@@ -43,3 +43,8 @@ USE_USER:
     ARG username=sam
     DO +SETUP_USER --groups="$groups" --uid="${uid}" --username="${username}"
     DO +AS_USER --uid="${uid}" --username="${username}"
+
+DEBIAN_NO_AUTO_INSTALL:
+  COMMAND
+  RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend
+  RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01norecommend

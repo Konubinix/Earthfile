@@ -48,3 +48,8 @@ DEBIAN_NO_AUTO_INSTALL:
   COMMAND
   RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend
   RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01norecommend
+
+USER_WRITE_ENV:
+    COMMAND
+    ARG --required name
+    RUN bash -c 'echo export ${name}="${!name}"' >> ${HOME}/.profile

@@ -1,13 +1,19 @@
 VERSION 0.6
 
 alpine:
-	FROM alpine
+    FROM alpine
     # setup time-zone https://wiki.alpinelinux.org/wiki/Setting_the_timezone
     RUN apk add --update tzdata && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone && apk del tzdata
 
 alpine-python:
-	FROM +alpine
+    FROM +alpine
     RUN apk add --update python3 py3-pip
+
+debian:
+   FROM debian:stable
+   DO +DEBIAN_NO_AUTO_INSTALL
+   RUN rm /etc/localtime
+   RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 
 pip-tools:
   FROM python:3.8-alpine

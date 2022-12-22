@@ -10,7 +10,7 @@ alpine-python:
     RUN apk add --update python3 py3-pip
 
 debian:
-   FROM debian:stable
+   FROM debian:stable-slim
    DO +DEBIAN_NO_AUTO_INSTALL
    RUN rm /etc/localtime
    RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime

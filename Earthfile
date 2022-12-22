@@ -24,9 +24,10 @@ SETUP_USER:
 	COMMAND
     ARG uid=1000
     ARG username=sam
+    ARG shell=/bin/sh
     ENV HOME=/home/$username
     RUN addgroup --gid $uid --system $username \
-    	&& adduser --uid $uid --shell /bin/sh --disabled-password $username --ingroup $username \
+    	&& adduser --uid $uid --shell ${shell} --disabled-password $username --ingroup $username \
 		&& chown -R $username:$username $HOME
 	ARG groups=audio video disk lp dialout users
 	IF  [ -n "$groups" ]

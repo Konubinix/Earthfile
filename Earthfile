@@ -2,6 +2,10 @@ VERSION 0.6
 
 alpine:
     FROM alpine
+    DO +ALPINE_TZ_FR
+
+ALPINE_TZ_FR:
+    COMMAND
     # setup time-zone https://wiki.alpinelinux.org/wiki/Setting_the_timezone
     RUN apk add --update tzdata && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone && apk del tzdata
 

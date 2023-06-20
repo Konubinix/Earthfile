@@ -1,6 +1,6 @@
 VERSION 0.7
 
-ARG --global DEBIAN_VERSION=11-slim
+ARG --global DEBIAN_VERSION=11
 
 alpine:
     FROM alpine:3.18.2
@@ -16,7 +16,7 @@ alpine-python:
     RUN apk add --update python3 py3-pip
 
 debian:
-   FROM debian:${DEBIAN_VERSION}
+   FROM debian:${DEBIAN_VERSION}-slim
    DO +DEBIAN_NO_AUTO_INSTALL
    DO +DEBIAN_TZ_FR
 
@@ -24,6 +24,14 @@ DEBIAN_TZ_FR:
    COMMAND
    RUN rm /etc/localtime
    RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
+
+debian-europe-paris:
+    FROM debian:${DEBIAN_VERSION}-slim
+    SAVE ARTIFACT /usr/share/zoneinfo/Europe/Paris localtime
+
+distroless-python3-debian:
+    FROM gcr.io/distroless/python3-debian${DEBIAN_VERSION}
+    COPY +debian-europe-paris/localtime /etc/localtime
 
 pip-tools:
   FROM python:3.8-alpine

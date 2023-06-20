@@ -18,6 +18,10 @@ alpine-python:
 debian:
    FROM debian:${DEBIAN_VERSION}
    DO +DEBIAN_NO_AUTO_INSTALL
+   DO +DEBIAN_TZ_FR
+
+DEBIAN_TZ_FR:
+   COMMAND
    RUN rm /etc/localtime
    RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 

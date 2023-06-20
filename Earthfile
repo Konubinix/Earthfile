@@ -1,7 +1,9 @@
-VERSION 0.6
+VERSION 0.7
+
+ARG --global DEBIAN_VERSION=11-slim
 
 alpine:
-    FROM alpine
+    FROM alpine:3.18.2
     DO +ALPINE_TZ_FR
 
 ALPINE_TZ_FR:
@@ -14,7 +16,7 @@ alpine-python:
     RUN apk add --update python3 py3-pip
 
 debian:
-   FROM debian:stable-slim
+   FROM debian:${DEBIAN_VERSION}
    DO +DEBIAN_NO_AUTO_INSTALL
    RUN rm /etc/localtime
    RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime

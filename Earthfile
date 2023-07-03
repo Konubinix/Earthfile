@@ -47,9 +47,10 @@ SETUP_USER:
     RUN addgroup --gid $uid --system $username \
     	&& adduser --uid $uid --shell ${shell} --disabled-password $username --ingroup $username \
 		&& chown -R $username:$username $HOME
-	ARG groups=audio video disk lp dialout users
+    # audio video disk lp dialout users
+	ARG groups
 	IF  [ -n "$groups" ]
-		RUN for group in $groups ; do addgroup --system $group && adduser $username $group ; done
+		RUN for group in $groups ; do { grep -q -E "^${group}:" /etc/group || addgroup --system $group ; } && adduser $username $group ; done
 	END
     ENV PATH=$HOME/.local/bin:$PATH
 

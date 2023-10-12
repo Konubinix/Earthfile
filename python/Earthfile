@@ -1,0 +1,6 @@
+VERSION 0.7
+
+flask-venv:
+    ARG packages
+    FROM ..+debian-python-user-venv --packages="flask ${packages}"
+    SAVE ARTIFACT /app/venv

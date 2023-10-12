@@ -7,6 +7,10 @@ ARG --global DEBIAN_VERSION=12
 alpine:
     FROM alpine:3.18.4
     DO +ALPINE_TZ_FR
+    ARG extra_packages
+    IF test -n "${extra_packages}"
+        RUN apk add ${extra_packages}
+    END
 
 ALPINE_TZ_FR:
     COMMAND
@@ -14,13 +18,17 @@ ALPINE_TZ_FR:
     RUN apk add --update tzdata && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone && apk del tzdata
 
 alpine-python:
-    FROM +alpine
-    RUN apk add --update python3 py3-pip
+    ARG extra_packages
+    FROM +alpine --extra_packages="python3 py3-pip ${extra_packages}"
 
 debian:
-   FROM debian:${DEBIAN_VERSION}-slim
-   DO +DEBIAN_NO_AUTO_INSTALL
-   DO +DEBIAN_TZ_FR
+    FROM debian:${DEBIAN_VERSION}-slim
+    DO +DEBIAN_NO_AUTO_INSTALL
+    DO +DEBIAN_TZ_FR
+    ARG extra_packages
+    IF test -n "${extra_packages}"
+        RUN apt-get update && apt-get install --yes ${extra_packages}
+    END
 
 DEBIAN_TZ_FR:
    COMMAND

@@ -21,6 +21,26 @@ alpine-python:
     ARG extra_packages
     FROM +alpine --extra_packages="python3 py3-pip ${extra_packages}"
 
+PYTHON_VENV:
+    COMMAND
+    ARG --required base
+    RUN python3 -m venv --system-site-packages ${base}/venv
+    ENV PATH=${base}/venv/bin:${PATH}
+    ARG packages
+    IF test -n "${packages}"
+        RUN ${base}/venv/bin/python -m pip install --upgrade ${packages}
+    END
+
+alpine-python-user-venv:
+    ARG dev=false
+    ARG extra_packages
+    FROM +alpine-python --dev=${dev} --extra_packages="${extra_packages}"
+	ARG groups
+    DO +USE_USER --groups="${groups}"
+    ARG packages
+    WORKDIR /app
+    DO +PYTHON_VENV --base=/app --packages=${packages}
+
 debian:
     FROM debian:${DEBIAN_VERSION}-slim
     DO +DEBIAN_NO_AUTO_INSTALL
@@ -29,6 +49,15 @@ debian:
     IF test -n "${extra_packages}"
         RUN apt-get update && apt-get install --yes ${extra_packages}
     END
+
+debian-python-user-venv:
+    ARG extra_packages
+    FROM +debian --extra_packages="python3-venv ${extra_packages}"
+	ARG groups
+    DO +USE_USER --groups="${groups}"
+    ARG packages
+    WORKDIR /app
+    DO +PYTHON_VENV --base=/app --packages=${packages}
 
 DEBIAN_TZ_FR:
    COMMAND

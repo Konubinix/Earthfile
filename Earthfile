@@ -72,6 +72,10 @@ distroless-python3-debian:
     FROM gcr.io/distroless/python3-debian${DEBIAN_VERSION}
     COPY +debian-europe-paris/localtime /etc/localtime
 
+distroless-debian:
+    FROM gcr.io/distroless/base-debian${DEBIAN_VERSION}
+    COPY +debian-europe-paris/localtime /etc/localtime
+
 pip-tools:
   FROM python:3.8-alpine
   DO +USE_USER

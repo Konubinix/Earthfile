@@ -1,9 +1,11 @@
 VERSION 0.7
 
-ARG --global DEBIAN_VERSION=11
+# https://www.debian.org/releases/
+# version 12.1, was released on July 22nd, 2023
+ARG --global DEBIAN_VERSION=12
 
 alpine:
-    FROM alpine:3.18.2
+    FROM alpine:3.18.4
     DO +ALPINE_TZ_FR
 
 ALPINE_TZ_FR:

@@ -38,8 +38,9 @@ alpine-python-user-venv:
 	ARG groups
     DO +USE_USER --groups="${groups}"
     ARG packages
-    WORKDIR /app
-    DO +PYTHON_VENV --base=/app --packages=${packages}
+    ARG workdir=/app
+    WORKDIR ${workdir}
+    DO +PYTHON_VENV --base=${workdir} --packages=${packages}
 
 debian:
     FROM debian:${DEBIAN_VERSION}-slim
@@ -56,8 +57,9 @@ debian-python-user-venv:
 	ARG groups
     DO +USE_USER --groups="${groups}"
     ARG packages
-    WORKDIR /app
-    DO +PYTHON_VENV --base=/app --packages=${packages}
+    ARG workdir=/app
+    WORKDIR ${workdir}
+    DO +PYTHON_VENV --base=${workdir} --packages=${packages}
 
 DEBIAN_TZ_FR:
    COMMAND

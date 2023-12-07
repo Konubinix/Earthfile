@@ -1,8 +1,9 @@
 VERSION 0.7
 
 # https://www.debian.org/releases/
-# version 12.1, was released on July 22nd, 2023
 ARG --global DEBIAN_VERSION=12
+ARG --global DEBIAN_MIN_VERSION=2
+
 
 alpine:
     FROM alpine:3.18.4
@@ -43,7 +44,7 @@ alpine-python-user-venv:
     DO +PYTHON_VENV --base=${workdir} --packages=${packages}
 
 debian:
-    FROM debian:${DEBIAN_VERSION}-slim
+    FROM debian:${DEBIAN_VERSION}.${DEBIAN_MIN_VERSION}-slim
     DO +DEBIAN_NO_AUTO_INSTALL
     DO +DEBIAN_TZ_FR
     ARG extra_packages
@@ -67,7 +68,7 @@ DEBIAN_TZ_FR:
    RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 
 debian-europe-paris:
-    FROM debian:${DEBIAN_VERSION}-slim
+    FROM debian:${DEBIAN_VERSION}.${DEBIAN_MIN_VERSION}-slim
     SAVE ARTIFACT /usr/share/zoneinfo/Europe/Paris localtime
 
 distroless-python3-debian:

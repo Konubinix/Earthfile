@@ -18,6 +18,12 @@ ALPINE_TZ_FR:
     # setup time-zone https://wiki.alpinelinux.org/wiki/Setting_the_timezone
     RUN apk add --update tzdata && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone && apk del tzdata
 
+alpine-tz:
+    FROM +alpine
+    RUN mkdir /output
+    RUN cp /etc/localtime /etc/timezone /output/
+    SAVE ARTIFACT /output
+
 alpine-python:
     ARG extra_packages
     FROM +alpine --extra_packages="python3 py3-pip ${extra_packages}"

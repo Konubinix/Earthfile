@@ -82,7 +82,7 @@ distroless-python3-debian:
     COPY +debian-europe-paris/localtime /etc/localtime
 
 distroless-debian:
-    FROM gcr.io/distroless/base-debian${DEBIAN_VERSION}
+    FROM gcr.io/distroless/static-debian${DEBIAN_VERSION}
     COPY +debian-europe-paris/localtime /etc/localtime
 
 pip-tools:

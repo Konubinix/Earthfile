@@ -1,4 +1,4 @@
-VERSION 0.7
+VERSION 0.8
 
 # https://www.debian.org/releases/
 ARG --global DEBIAN_VERSION=12
@@ -14,7 +14,7 @@ alpine:
     END
 
 ALPINE_TZ_FR:
-    COMMAND
+    FUNCTION
     # setup time-zone https://wiki.alpinelinux.org/wiki/Setting_the_timezone
     RUN apk add --update tzdata && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone && apk del tzdata
 
@@ -29,7 +29,7 @@ alpine-python:
     FROM +alpine --extra_packages="python3 py3-pip ${extra_packages}"
 
 PYTHON_VENV:
-    COMMAND
+    FUNCTION
     ARG --required base
     RUN python3 -m venv --system-site-packages ${base}/venv
     ENV PATH=${base}/venv/bin:${PATH}
@@ -69,7 +69,7 @@ debian-python-user-venv:
     DO +PYTHON_VENV --base=${workdir} --packages=${packages}
 
 DEBIAN_TZ_FR:
-   COMMAND
+   FUNCTION
    RUN rm /etc/localtime
    RUN ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 
@@ -91,7 +91,7 @@ pip-tools:
   RUN pip install pip-tools
 
 SETUP_USER:
-	COMMAND
+	FUNCTION
     ARG uid=1000
     ARG username=sam
     ARG shell=/bin/sh
@@ -107,7 +107,7 @@ SETUP_USER:
     ENV PATH=$HOME/.local/bin:$PATH
 
 AS_USER:
-	COMMAND
+	FUNCTION
     ARG uid=1000
     ARG username=sam
     ENV HOME=/home/$username
@@ -115,7 +115,7 @@ AS_USER:
     WORKDIR $HOME
 
 USE_USER:
-	COMMAND
+	FUNCTION
 	ARG groups
     ARG uid=1000
     ARG username=sam
@@ -123,11 +123,11 @@ USE_USER:
     DO +AS_USER --uid="${uid}" --username="${username}"
 
 DEBIAN_NO_AUTO_INSTALL:
-  COMMAND
+  FUNCTION
   RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommend
   RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/01norecommend
 
 USER_WRITE_ENV:
-    COMMAND
+    FUNCTION
     ARG --required name
     RUN bash -c 'echo export ${name}="${!name}"' >> ${HOME}/.profile

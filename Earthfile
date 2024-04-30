@@ -94,12 +94,16 @@ SETUP_USER:
 	FUNCTION
     ARG uid=1000
     ARG username=sam
+    ARG sudoer=n
     ARG shell=/bin/sh
     ENV HOME=/home/$username
     RUN addgroup --gid $uid --system $username \
     	&& adduser --uid $uid --shell ${shell} --disabled-password $username --ingroup $username \
 		&& chown -R $username:$username $HOME
     # audio video disk lp dialout users
+    IF test "${sudoer}" = "y"
+        RUN mkdir -p /etc/sudoers.d && echo "${username} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/username
+    END
 	ARG groups
 	IF  [ -n "$groups" ]
 		RUN for group in $groups ; do { grep -q -E "^${group}:" /etc/group || addgroup --system $group ; } && adduser $username $group ; done
@@ -118,8 +122,9 @@ USE_USER:
 	FUNCTION
 	ARG groups
     ARG uid=1000
+    ARG sudoer=n
     ARG username=sam
-    DO +SETUP_USER --groups="$groups" --uid="${uid}" --username="${username}"
+    DO +SETUP_USER --sudoer="${sudoer}" --groups="$groups" --uid="${uid}" --username="${username}"
     DO +AS_USER --uid="${uid}" --username="${username}"
 
 DEBIAN_NO_AUTO_INSTALL:

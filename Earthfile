@@ -49,6 +49,11 @@ alpine-python-user-venv:
     WORKDIR ${workdir}
     DO +PYTHON_VENV --base=${workdir} --packages=${packages}
 
+DEBIAN_APT_CLEANUP:
+    FUNCTION
+    RUN apt-get clean && \
+        rm -rf /var/lib/apt/lists/*
+
 debian:
     FROM debian:${DEBIAN_VERSION}.${DEBIAN_MIN_VERSION}-slim
     DO +DEBIAN_NO_AUTO_INSTALL
@@ -56,6 +61,7 @@ debian:
     ARG extra_packages
     IF test -n "${extra_packages}"
         RUN apt-get update && apt-get install --yes ${extra_packages}
+        DO +DEBIAN_APT_CLEANUP
     END
 
 debian-python-user-venv:

@@ -2,7 +2,7 @@ VERSION 0.8
 
 # https://www.debian.org/releases/
 ARG --global DEBIAN_VERSION=12
-ARG --global DEBIAN_MIN_VERSION=2
+ARG --global DEBIAN_MIN_VERSION=5
 
 
 alpine:

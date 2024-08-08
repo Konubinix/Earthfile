@@ -103,6 +103,7 @@ SETUP_USER:
     ARG sudoer=n
     ARG shell=/bin/sh
     ENV HOME=/home/$username
+    RUN if ! which addgroup && which apt ; then apt update && apt install --yes adduser ; fi
     RUN addgroup --gid $uid --system $username \
     	&& adduser --uid $uid --shell ${shell} --disabled-password $username --ingroup $username \
 		&& chown -R $username:$username $HOME

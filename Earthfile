@@ -13,6 +13,11 @@ alpine:
         RUN apk add ${extra_packages}
     END
 
+alpine-user:
+    ARG extra_packages
+    FROM +alpine --extra_packages="${extra_packages}"
+    DO +USE_USER
+
 ALPINE_TZ_FR:
     FUNCTION
     # setup time-zone https://wiki.alpinelinux.org/wiki/Setting_the_timezone
@@ -63,6 +68,11 @@ debian:
         RUN apt-get update && apt-get install --yes ${extra_packages}
         DO +DEBIAN_APT_CLEANUP
     END
+
+debian-user:
+    ARG extra_packages
+    FROM +debian --extra_packages="${extra_packages}"
+    DO +USE_USER
 
 debian-python-user-venv:
     ARG extra_packages

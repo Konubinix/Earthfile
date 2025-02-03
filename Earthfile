@@ -10,7 +10,7 @@ alpine:
     DO +ALPINE_TZ_FR
     ARG extra_packages
     IF test -n "${extra_packages}"
-        RUN apk add -q ${extra_packages}
+        RUN apk -q add ${extra_packages}
     END
 
 alpine-user:

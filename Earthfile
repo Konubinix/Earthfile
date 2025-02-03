@@ -10,7 +10,7 @@ alpine:
     DO +ALPINE_TZ_FR
     ARG extra_packages
     IF test -n "${extra_packages}"
-        RUN apk add ${extra_packages}
+        RUN apk --quiet add ${extra_packages}
     END
 
 alpine-user:
@@ -21,7 +21,7 @@ alpine-user:
 ALPINE_TZ_FR:
     FUNCTION
     # setup time-zone https://wiki.alpinelinux.org/wiki/Setting_the_timezone
-    RUN apk add --update tzdata && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone && apk del tzdata
+    RUN apk --quiet add --update tzdata && cp /usr/share/zoneinfo/Europe/Paris /etc/localtime && echo "Europe/Paris" > /etc/timezone && apk --quiet del tzdata
 
 alpine-tz:
     FROM +alpine
@@ -40,7 +40,7 @@ PYTHON_VENV:
     ENV PATH=${base}/venv/bin:${PATH}
     ARG packages
     IF test -n "${packages}"
-        RUN ${base}/venv/bin/python -m pip install --upgrade ${packages}
+        RUN ${base}/venv/bin/python -m pip --quiet install --upgrade ${packages}
     END
 
 alpine-python-user-venv:
@@ -56,7 +56,7 @@ alpine-python-user-venv:
 
 DEBIAN_APT_CLEANUP:
     FUNCTION
-    RUN apt-get clean && \
+    RUN apt-get --quiet clean && \
         rm -rf /var/lib/apt/lists/*
 
 debian:
@@ -65,7 +65,8 @@ debian:
     DO +DEBIAN_TZ_FR
     ARG extra_packages
     IF test -n "${extra_packages}"
-        RUN apt-get update && apt-get install --yes ${extra_packages}
+        RUN apt-get --quiet update > /tmp/log 2>&1 || { cat /tmp/log; exit 1; }
+        RUN apt-get --quiet install --yes ${extra_packages} > /tmp/log 2>&1 || { cat /tmp/log; exit 1; }
         DO +DEBIAN_APT_CLEANUP
     END
 
@@ -104,7 +105,7 @@ distroless-debian:
 pip-tools:
   FROM python:3.8-alpine
   DO +USE_USER
-  RUN pip install pip-tools
+  RUN pip --quiet install pip-tools
 
 SETUP_USER:
 	FUNCTION

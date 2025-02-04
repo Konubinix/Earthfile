@@ -2,11 +2,11 @@ VERSION 0.8
 
 # https://www.debian.org/releases/
 ARG --global DEBIAN_VERSION=12
-ARG --global DEBIAN_MIN_VERSION=5
+ARG --global DEBIAN_MIN_VERSION=9
 
 
 alpine:
-    FROM alpine:3.21.0
+    FROM alpine:3.21.1
     DO +ALPINE_TZ_FR
     ARG extra_packages
     IF test -n "${extra_packages}"

@@ -1,0 +1,38 @@
+#+language: en
+
+In my personal and professional life, I often have to create build images based on either alpine or debian. The flow is always the same.
+
+1. start with a base image as small as possible,
+2. install the dependencies,
+3. setup the timezone,
+4. create some groups and a user to be used in the created containers,
+5. put the code in a distroless image,
+
+
+
+For instance, this is how I created [[https://hub.docker.com/r/konubinix/p100][the image]] to control some p100 wifi plugs.
+
+#+BEGIN_SRC earthfile   
+VERSION 0.8
+IMPORT github.com/Konubinix/Earthfile AS e
+
+p100-venv:
+    FROM e+debian-python-user-venv --extra_packages="build-essential python3-dev" --packages="humanize redis"
+    GIT CLONE https://github.com/almottier/TapoP100 /app/TapoP100
+    WORKDIR /app/TapoP100
+    RUN pip install /app/TapoP100
+    SAVE ARTIFACT /app/venv
+
+p100-build-distroless:
+    FROM e+distroless-python3-debian
+    COPY +p100-venv/venv /app/venv
+    ARG --required ref
+    SAVE IMAGE --push konubinix/p100:$ref konubinix/p100:latest
+#+END_SRC
+
+#+BEGIN_SRC bash :results verbatim :exports both 
+docker inspect konubinix/p100:latest|jq ".[0].Size/1024/1024"
+#+END_SRC
+
+#+RESULTS:
+: 85.4291124343872

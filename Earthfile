@@ -6,7 +6,7 @@ ARG --global DEBIAN_MIN_VERSION=9
 
 
 alpine:
-    FROM alpine:3.21.1
+    FROM alpine:3.21.2
     DO +ALPINE_TZ_FR
     ARG extra_packages
     IF test -n "${extra_packages}"

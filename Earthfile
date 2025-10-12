@@ -6,7 +6,7 @@ ARG --global DEBIAN_MIN_VERSION=9
 
 
 alpine:
-    FROM alpine:3.21.2
+    FROM alpine:3.22.2
     DO +ALPINE_TZ_FR
     ARG extra_packages
     IF test -n "${extra_packages}"
@@ -15,8 +15,9 @@ alpine:
 
 alpine-user:
     ARG extra_packages
+    ARG groups
     FROM +alpine --extra_packages="${extra_packages}"
-    DO +USE_USER
+    DO +USE_USER --groups="${groups}"
 
 ALPINE_TZ_FR:
     FUNCTION

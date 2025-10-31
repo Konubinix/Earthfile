@@ -102,6 +102,10 @@ distroless-debian:
     FROM gcr.io/distroless/static-debian${DEBIAN_VERSION}
     COPY +debian-europe-paris/localtime /etc/localtime
 
+DISTROLESS_TZ_FR:
+    FUNCTION
+    COPY +debian-europe-paris/localtime /etc/localtime
+
 pip-tools:
   FROM python:3.8-alpine
   DO +USE_USER

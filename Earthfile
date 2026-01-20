@@ -1,12 +1,13 @@
 VERSION 0.8
 
 # https://www.debian.org/releases/
-ARG --global DEBIAN_VERSION=12
-ARG --global DEBIAN_MIN_VERSION=9
+# crane ls debian|sort -V|gi '^[0-9]'
+ARG --global DEBIAN_VERSION=13
+ARG --global DEBIAN_MIN_VERSION=2
 
 
 alpine:
-    FROM alpine:3.22.2
+    FROM alpine:3.23
     DO +ALPINE_TZ_FR
     ARG extra_packages
     IF test -n "${extra_packages}"

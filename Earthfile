@@ -121,7 +121,7 @@ SETUP_USER:
     ENV HOME=/home/$username
     RUN if ! which addgroup && which apt ; then apt update && apt install --yes adduser ; fi
     RUN addgroup --gid $uid --system $username \
-    	&& adduser --uid $uid --shell ${shell} --disabled-password $username --ingroup $username \
+    	&& adduser --uid $uid --shell ${shell} --disabled-password --gecos "" $username --ingroup $username \
 		&& chown -R $username:$username $HOME
     # audio video disk lp dialout users
     IF test "${sudoer}" = "y"
